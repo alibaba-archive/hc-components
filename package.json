@@ -60,7 +60,9 @@
     },
     "scripts": {
       "lint": "eslint ./src",
-      "build": "honeypack build -c webpack.build.js"
+      "build": "honeypack build -c webpack.build.js",
+
+      "propType": "node ./demo/bin/antd_prop_type"
     },
     "license": "MIT"
   }

@@ -1,0 +1,559 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var fs = require('fs');
+var _ = require('lodash');
+var rootDir = path.join(process.cwd(), 'node_modules/antd/es')
+
+const propTypes = {
+  string: (extra) => Object.assign({
+    type: 'string'
+  }, extra),
+  number: (extra) => Object.assign({
+    type: 'number'
+  }, extra),
+  Boolean: (extra) => Object.assign({
+    type: 'boolean'
+  }, extra),
+  boolean: (extra) => Object.assign({
+    type: 'boolean'
+  }, extra),
+  null: (extra) => Object.assign({
+    type: 'null'
+  }, extra),
+  undefined: (extra) => Object.assign({
+    type: 'null'
+  }, extra),
+  Date: (extra) => Object.assign({
+    type: 'string',
+    format: 'DATE'
+  }, extra),
+  Object: (extra) => Object.assign({
+    type: 'object',
+    properties: {
+
+    },
+    required: []
+  }, extra),
+  object: (extra) => Object.assign({
+    type: 'object',
+    properties: {
+
+    },
+    required: []
+  }, extra),
+  Array: (extra) => Object.assign({
+    type: 'array',
+    items: {
+    }
+  }, extra),
+  Function: (extra) => Object.assign({
+    type: 'string',
+    format: 'Function'
+  }, extra),
+  'moment.Moment': (extra) => Object.assign({
+    type: 'string',
+    format: 'Moment'
+  }, extra),
+  'React.MouseEventHandler<any>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '(event: EventHandler) => any'
+  }),
+  'React.FocusEventHandler<HTMLElement>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '(event: EventHandler) => any'
+  }),
+  'React.FormEventHandler<any>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '(event: EventHandler) => any'
+  }),
+  'CompareFn': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '((a: T, b: T) => number)'
+  }),
+  'SelectionSelectFn': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '(record: T, selected: boolean, selectedRows: Object[]) => any'
+  }),
+  'RenderFunction': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '() => React.ReactNode'
+  }),
+  'React.MouseEventHandler<HTMLDivElement>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '(event: EventHandler) => any'
+  }),
+  'React.MouseEventHandler<HTMLAnchorElement>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '(event: EventHandler) => any'
+  }),
+  'React.ChangeEventHandler<HTMLInputElement>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '(value: string[]) => any'
+  }),
+  'RowSelectionType': (extra) => Object.assign({
+    type: 'string',
+    enum: ['checkbox', 'radio']
+  }, extra),
+  'TransferDirection': (extra) => Object.assign({
+    type: 'string',
+    enum: ['left', 'right']
+  }, extra),
+  'CarouselEffect': (extra) => Object.assign({
+    type: 'string',
+    enum: ['scrollx', 'fade']
+  }, extra),
+  'CalendarMode': (extra) => Object.assign({
+    type: 'string',
+    enum: ['month', 'year']
+  }, extra),
+  'ButtonType': (extra) => Object.assign({
+    type: 'string',
+    enum: ['primary', 'ghost', 'dashed', 'danger']
+  }, extra),
+  'ButtonShape': (extra) => Object.assign({
+    type: 'string',
+    enum: ['circle', 'circle-outline']
+  }, extra),
+  'ButtonSize': (extra) => Object.assign({
+    type: 'string',
+    enum: ['small', 'default', 'large']
+  }, extra),
+  'CardType': (extra) => Object.assign({
+    type: 'string',
+    default: 'inner'
+  }, extra),
+  'SelectionItemSelectFn': (extra) => Object.assign({
+    type: 'string',
+    format: 'Function',
+    description: '(key: string[]) => any'
+  }),
+  'React.ReactNode': (extra) => Object.assign({
+    type: 'string',
+    format: 'Element'
+  }, extra),
+  'React.ComponentClass': (extra) => Object.assign({
+    type: 'string',
+    format: 'Antd'
+  }, extra),
+  'React.ClassicComponentClass<RangePickerProps>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Antd'
+  }, extra),
+  'React.ClassicComponentClass<MonthPickerProps>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Antd'
+  }, extra),
+  'React.ClassicComponentClass<WeexPickerProps>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Antd'
+  }, extra),
+  'HTMLElement': (extra) => Object.assign({
+    type: 'string',
+    format: 'Element'
+  }, extra),
+  'React.ReactElement<OptionProps>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Element'
+  }, extra),
+  'React.ReactElement<any>': (extra) => Object.assign({
+    type: 'string',
+    format: 'Element'
+  }, extra),
+  'ValidInputElement': (extra) => Object.assign({
+    type: 'string',
+    format: 'Element'
+  }, extra),
+  any: (extra) => Object.assign({
+    type: 'string',
+    format: 'Element'
+  }, extra),
+  'React.CSSProperties': (extra) => Object.assign({
+    type: 'object',
+    properties: {},
+    format: 'CSS'
+  }, extra),
+  'TooltipPlacement': (extra) => Object.assign({
+    type: 'string',
+    enum: ['top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight', 'leftTop', 'leftBottom', 'rightTop', 'rightBottom']
+  }, extra),
+  'AntTreeNode[]': () => ({
+    type: 'array',
+    items: cloneDeepFromSchema('AntTreeNodeProps')
+  }),
+  'AntTreeNode': () => cloneDeepFromSchema('AntTreeNodeProps'),
+  'UploadFileStatus': (extra) => Object.assign({
+    type: 'string',
+    enum: ['error', 'success', 'done', 'uploading', 'removed']
+  }, extra),
+  'File': (extra) => Object.assign({
+    type: 'string',
+    format: 'File'
+  }, extra),
+  'TabsType': (extra) => Object.assign({
+    type: 'string',
+    enum: ['line', 'card', 'editable-card']
+  }, extra),
+  'TabsPosition': (extra) => Object.assign({
+    type: 'string',
+    enum: ['top', 'right', 'bottom', 'left']
+  }, extra),
+  'MentionPlacement': (extra) => Object.assign({
+    type: 'string',
+    enum: ['top', 'bottom']
+  }, extra),
+  'MenuMode': (extra) => Object.assign({
+    type: 'string',
+    enum: ['vertical', 'vertical-left', 'vertical-right', 'horizontal', 'inline']
+  }, extra),
+  'SliderValue': (extra) => Object.assign({
+    type: 'number',
+    oneOf: [{
+      type: 'number'
+    }, {
+      type: 'array',
+      items: [{
+        type: 'number'
+      }, {
+        type: 'number'
+      }]
+    }]
+  }, extra),
+  'CheckboxValueType': (extra) => Object.assign({
+    type: 'string',
+    oneOf: [{
+      type: 'string'
+    }, {
+      type: 'number'
+    }]
+  }, extra),
+  'SelectValue': (extra) => Object.assign({
+    type: 'string',
+    oneOf: [{
+      type: 'string'
+    }, 
+    cloneDeepFromSchema('LabeledValue'),
+    {
+      type: 'array',
+      items: cloneDeepFromSchema('LabeledValue')
+    }]
+  }, extra),
+  'DataSourceItemType': (extra) => Object.assign({
+    type: 'string',
+    oneOf: [{
+      type: 'string'
+    }, 
+    cloneDeepFromSchema('DataSourceItemObject')]
+  }, extra),
+  'NotificationPlacement': (extra) => Object.assign({
+    type: 'string',
+    enum: ['topLeft', 'topRight', 'bottomLeft', 'bottomRight']
+  }, extra),
+  'CascaderExpandTrigger': (extra) => Object.assign({
+    type: 'string',
+    enum: ['click', 'hover']
+  }, extra),
+  'IconType': (extra) => Object.assign({
+    type: 'string',
+    enum: ['success', 'info', 'error', 'warning']
+  }, extra),
+  'TooltipPlacement': (extra) => Object.assign({
+    type: 'string',
+    enum: ['top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight', 'leftTop', 'leftBottom', 'rightTop', 'rightBottom']
+  }, extra),
+  'SelectionItem': () => cloneDeepFromSchema('SelectionItem') || propTypes['object'](),
+  'AdjustOverflow': () => cloneDeepFromSchema('AdjustOverflow') || propTypes['object'](),
+  'PlacementsConfig': () => cloneDeepFromSchema('PlacementsConfig') || propTypes['object'](),
+  'ListGridType': () => cloneDeepFromSchema('ListGridType') || propTypes['object'](),
+  'ColProps': () => cloneDeepFromSchema('ColProps') || propTypes['object'](),
+  'TimePickerProps': () => cloneDeepFromSchema('TimePickerProps') || propTypes['object'](),
+  'ModalLocale': () => cloneDeepFromSchema('ModalLocale') || propTypes['object'](),
+  'WrappedFormUtils': () => ({
+    type: 'object',
+    properties: {
+
+    }
+  }),
+  'false': (extra) => propTypes['boolean']({
+    default: false
+  }),
+  'React.Key': (extra) => propTypes['string'](),
+  'ColumnCount': (extra) => Object.assign({
+    type: 'number',
+    enum: [1, 2, 3, 4, 6, 8, 12, 24]
+  }, extra),
+  'ColumnCount': (extra) => Object.assign({
+    type: 'number',
+    enum: [1, 2, 3, 4, 6, 8, 12, 24]
+  }, extra),
+  'ColumnType': (extra) => Object.assign({
+    type: 'string',
+    enum: ['gutter', 'column', 'xs', 'sm', 'md', 'lg', 'xl']
+  }, extra),
+  'ListSize': (extra) => Object.assign({
+    type: 'string',
+    enum: ['small', 'default', 'large']
+  }, extra),
+  'T': (extra) => propTypes['string']({
+    format: 'JSON'
+  }),
+  'ColumnFilterItem': (extra) => Object.assign({
+    type: 'object',
+    properties: {
+      text: {
+        type: 'string'
+      },
+      value: {
+        type: 'string'
+      },
+      children: propTypes['any']()
+    },
+    required: ['text', 'value']
+  }, extra),
+  'BreakpointMap': (extra) => Object.assign({
+    type: 'object',
+    properties: {
+      xs: {
+        type: 'string'
+      },
+      sm: {
+        type: 'string'
+      },
+      md: {
+        type: 'string'
+      },
+      lg: {
+        type: 'string'
+      },
+      xl: {
+        type: 'string'
+      },
+      xxl: {
+        type: 'string'
+      }
+    }
+  }, extra)
+}
+
+const allSchema = {};
+const modulesMap = {};
+
+const regExp1 = / interface ([\w]*)[\s<][^\{]*(\{[\s\S]*?\})/g
+
+function cloneDeepFromSchema(name) {
+  return _.cloneDeep(allSchema[name]);
+}
+
+function extracPropType(schema, name, value){
+  if(name === 'locale?' || name === 'style?') return;
+
+  if(name[name.length - 1] === '?'){
+    name = name.slice(0, -1);
+  }else{
+    schema.required.push(name);
+  }
+  switch(true){
+    case !!propTypes[value]:
+      schema.properties[name] = propTypes[value]();
+      break;
+    case !!allSchema[value]:
+      schema.properties[name] = cloneDeepFromSchema(value);
+      break;
+    case value[0] === '(':
+      schema.properties[name] = propTypes['Function']({
+        description: value
+      });
+      break;
+    case value[0] === "'" || !isNaN(Number(value[0])):
+      schema.properties[name] = propTypes['string']({
+        enum: value.replace(/['"]/g, '').split(' | ')
+      });
+      break;
+    case value[0] === '[':
+      const allOfMap = {
+        required: [],
+        properties: {
+
+        }
+      };
+      value.slice(1, -1).split(', ').forEach(key => {
+        extracPropType(allOfMap, key, key);
+      });
+      schema.properties[name] = propTypes['string']({
+        allOf: Object.keys(allOfMap).map(key => allOfMap[key]),
+        required: allOfMap.required
+      });
+      break;
+    case value.substr(0, 5) === 'Array':
+      if(value[value.length - 1] === '>'){
+        value = value.slice(6, -1);
+      }
+      if(value.indexOf(' | ') > -1){
+        var oneOfMap = {
+          required: [],
+          properties: {
+  
+          }
+        };
+        value.split(' | ').forEach(key => {
+          extracPropType(oneOfMap, key, key);
+        });
+        schema.properties[name] = propTypes['string']({
+          oneOf: Object.keys(oneOfMap.properties).map(key => oneOfMap.properties[key])
+        });
+      }else{
+        if(propTypes[value]){
+          value = propTypes[value]();
+        }else if(allSchema[value]) {
+          value = cloneDeepFromSchema(value);
+        }else{
+          console.log('error<Array>: ' + value);
+          value = propTypes['object']();
+        }
+        if(value.type === 'object') {
+          value = value.properties;
+        }else{
+          value = [value];
+        }
+        schema.properties[name] = propTypes['Array']({
+          items: value
+        });
+      }
+      break;
+    case value.indexOf('|') > -1:
+      var oneOfMap = {
+        required: [],
+        properties: {
+
+        }
+      };
+      value.split(' | ').forEach(key => {
+        if(key !== 'undefined'){
+          extracPropType(oneOfMap, key, key);
+        }
+      });
+      schema.properties[name] = propTypes['string']({
+        oneOf: Object.keys(oneOfMap.properties).map(key => oneOfMap.properties[key])
+      });
+      break;
+    case value[0] === '{':
+      schema.properties[name] = propTypes['Object']();
+      extracPropTypes(schema.properties[name], value);
+      break;
+    case value.indexOf('<') > -1:
+      const isArr = value[value.length -1] === ']';
+      value = value.split('<')[0];
+      if(propTypes[value]){
+        value = propTypes[value]();
+      }else if(allSchema[value]){
+        value = cloneDeepFromSchema(value);
+      } else {
+        value = propTypes['object']();
+        console.log('error<unknown>: ' + value);
+      }
+      if(isArr){
+        schema.properties[name] = propTypes['Array']({
+          items: value.properties
+        });
+      }else{
+        schema.properties[name] = value;
+      }
+      break;
+    case value[value.length -1] === ']':
+      value = value.slice(0, -2);
+      if(propTypes[value]){
+        value = propTypes[value]();
+      }else if(allSchema[value]) {
+        value = cloneDeepFromSchema(value);
+      }else{
+        console.log('error<[]>: ' + value);
+        value = propTypes['object']();
+      }
+      if(value.type === 'object') {
+        value = value.properties;
+      }else{
+        value = [value];
+      }
+      schema.properties[name] = propTypes['Array']({
+        items: value
+      });
+      break;
+    default:
+      // success(args: ArgsProps): void;
+      // CascaderOptionType 子循环依赖了
+      console.log('warn: ' + value);
+      break;
+  }
+}
+
+function extracPropTypes(schema, propValue) {
+  const regExp2 = /([\w?]+): (([^\{;]*\{[^\}]+\})|([^;]*);)/g;
+  let mt2, name, value, objectValue;
+  // 获取key: value
+  while(mt2 = regExp2.exec(propValue)) {
+    name = mt2[1];
+    if(mt2[4]){
+      value = mt2[4].split(']: ').pop();
+    }else{
+      value = '';
+    }
+    if(mt2[3]){
+      if(mt2[3][0] === '{'){
+        objectValue = mt2[3];
+      }else{
+        objectValue = mt2[3].split(']: ').pop();
+      }
+    }else{
+      objectValue = '';
+    }
+    // console.log(name + ':' + value);
+    extracPropType(schema, name, value || objectValue);
+  }
+}
+
+function readFiels(dir, callback){
+  fs.readdir(dir, function(err, filenames) {
+    if (err) {
+      throw err;
+    }
+    filenames.forEach(function(filename) {
+      var fullname = path.join(dir, filename);
+      if(fs.statSync(fullname).isDirectory()){
+        readFiels(fullname, callback);
+      }else if(path.extname(fullname) === '.ts'){
+        modulesMap[fullname] = true;
+        fs.readFile(fullname, 'utf-8', function(err, content) {
+          // console.log(fullname);
+          delete modulesMap[fullname];
+          if (err) {
+            throw err;
+          }
+          let mt1;
+          // 获取到{...}
+          while(mt1 = regExp1.exec(content)){
+            allSchema[mt1[1]] = propTypes['Object']();
+            extracPropTypes(allSchema[mt1[1]], mt1[2]);
+          }
+          if(!Object.keys(modulesMap).length){
+            callback();
+          }
+        });
+      }
+    });
+  });
+}
+
+readFiels(rootDir, () => {
+  allSchema['RadioProps'] = allSchema['AbstractCheckboxProps'];
+  fs.writeFileSync(path.join(process.cwd(), 'demo/vizWrapper/antdPropTypes.js'), 'module.exports = ' + JSON.stringify(allSchema, null, 2));
+  // console.log(JSON.stringify(allSchema, null ,2));
+});
