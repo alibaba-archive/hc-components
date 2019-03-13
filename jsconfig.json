@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "es2015",
+        "experimentalDecorators": true
+    },
+    "exclude": [
+        "node_modules",
+        "dist",
+        "build"
+    ] // removing this also doesn't help - this same config used to work in 0.10.12 AFAICT
+}

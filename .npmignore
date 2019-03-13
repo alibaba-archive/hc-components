@@ -1,0 +1,11 @@
+.idea/
+node_modules/
+xuejiang.sh
+git-m
+.vscode/
+.DS_Store
+*.log
+.build/
+.package/
+package-lock.json
+out/
