@@ -4238,9 +4238,185 @@ module.exports = require("antd/lib/auto-complete");
 
 /***/ }),
 /* 40 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("antd/lib/modal");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GModal = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _class, _temp;
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _modal = __webpack_require__(92);
+
+var _modal2 = _interopRequireDefault(_modal);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var iModal = void 0;
+var GModal = exports.GModal = (_temp = _class = function (_React$PureComponent) {
+  _inherits(GModal, _React$PureComponent);
+
+  function GModal(props) {
+    _classCallCheck(this, GModal);
+
+    var _this = _possibleConstructorReturn(this, (GModal.__proto__ || Object.getPrototypeOf(GModal)).call(this, props));
+
+    _this.state = {
+      activeKeys: [],
+      timestamp: +new Date().getTime(),
+      modals: {}
+    };
+
+    iModal = props.component;
+    props.component.open = function (config) {
+      config.key = config.key || +new Date().getTime();
+      config.width = config.width || _this.props.width;
+      _this.applyChange(config, 'add');
+
+      return {
+        destroy: function destroy() {
+          _this.applyChange(config, 'delete');
+        },
+        closeModal: function closeModal() {
+          _this.applyChange(config, 'delete');
+        }
+      };
+    };
+    return _this;
+  }
+
+  _createClass(GModal, [{
+    key: 'applyChange',
+    value: function applyChange(config, operate) {
+      var _state = this.state,
+          modals = _state.modals,
+          activeKeys = _state.activeKeys;
+
+      switch (operate) {
+        case 'add':
+          config.onOk = this.getAction(config.onOk, config);
+          config.onCancel = this.getAction(config.onCancel, config);
+          if (config.visible === undefined) {
+            config.visible = true;
+          }
+          modals[config.key] = config;
+          activeKeys.push(config.key);
+          this.setState({
+            timestamp: +new Date().getTime()
+          });
+          break;
+        case 'update':
+          modals[config.key] = Object.assign({}, modals[config.key], config);
+          var idx = activeKeys.indexOf(config.key);
+          if (idx) {
+            activeKeys.splice(idx, 1);
+          }
+          activeKeys.push(config.key);
+          this.setState({
+            timestamp: +new Date().getTime()
+          });
+          break;
+        case 'delete':
+          delete modals[config.key];
+          activeKeys.pop();
+          this.setState({
+            timestamp: +new Date().getTime()
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  }, {
+    key: 'getAction',
+    value: function getAction(actionFn, config) {
+      var _this2 = this;
+
+      var closeModal = function closeModal() {
+        _this2.applyChange(config, 'delete');
+      };
+      return function () {
+        if (actionFn) {
+          var ret = actionFn(closeModal);
+          if (ret && ret.then) {
+            _this2.applyChange({ key: config.key, confirmLoading: true }, 'update');
+            ret.then(function () {
+              // It's unnecessary to set loading=false, for the Modal will be unmounted after
+              // close. this.update({   key: config.key,   confirmLoading: false });
+              closeModal();
+            }, function () {
+              _this2.applyChange({ key: config.key, confirmLoading: false }, 'update');
+            });
+          } else if (ret !== false) {
+            if (_this2.state.modals[config.key]) {
+              closeModal();
+            }
+          }
+        } else {
+          closeModal();
+        }
+      };
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var modals = this.state.modals;
+      return _react2.default.createElement(
+        'div',
+        null,
+        Object.keys(modals).map(function (key) {
+          return _react2.default.createElement(
+            _this3.props.component,
+            _extends({}, modals[key], { key: key }),
+            _react2.default.createElement(
+              'div',
+              { className: (modals[key].prefixCls || 'j-com-modal') + '-body-wrapper' },
+              modals[key].content
+            )
+          );
+        })
+      );
+    }
+  }]);
+
+  return GModal;
+}(_react2.default.PureComponent), _class.propTypes = {
+  component: _propTypes2.default.any,
+  width: _propTypes2.default.any
+}, _class.defaultProps = {
+  component: _modal2.default
+}, _temp);
+
+
+['open', 'info', 'success', 'error', 'warning', 'confirm'].forEach(function (action) {
+  GModal[action] = function (props) {
+    return iModal[action](props);
+  };
+});
 
 /***/ }),
 /* 41 */
@@ -6775,7 +6951,7 @@ var map = {
 	"./components/header/index.jsx": 21,
 	"./components/headerSearch/index.js": 38,
 	"./components/loadingBar/index.jsx": 91,
-	"./components/modal/index.jsx": 92,
+	"./components/modal/index.jsx": 40,
 	"./components/navLink/index.jsx": 12,
 	"./components/notifier/copyLogger.jsx": 41,
 	"./components/notifier/errorFetch.js": 94,
@@ -8404,185 +8580,9 @@ var LoadingBar = exports.LoadingBar = (_temp = _class = function (_React$Compone
 
 /***/ }),
 /* 92 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.GModal = undefined;
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _class, _temp;
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(1);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _modal = __webpack_require__(40);
-
-var _modal2 = _interopRequireDefault(_modal);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var iModal = void 0;
-var GModal = exports.GModal = (_temp = _class = function (_React$PureComponent) {
-  _inherits(GModal, _React$PureComponent);
-
-  function GModal(props) {
-    _classCallCheck(this, GModal);
-
-    var _this = _possibleConstructorReturn(this, (GModal.__proto__ || Object.getPrototypeOf(GModal)).call(this, props));
-
-    _this.state = {
-      activeKeys: [],
-      timestamp: +new Date().getTime(),
-      modals: {}
-    };
-
-    iModal = props.component;
-    props.component.open = function (config) {
-      config.key = config.key || +new Date().getTime();
-      config.width = config.width || _this.props.width;
-      _this.applyChange(config, 'add');
-
-      return {
-        destroy: function destroy() {
-          _this.applyChange(config, 'delete');
-        },
-        closeModal: function closeModal() {
-          _this.applyChange(config, 'delete');
-        }
-      };
-    };
-    return _this;
-  }
-
-  _createClass(GModal, [{
-    key: 'applyChange',
-    value: function applyChange(config, operate) {
-      var _state = this.state,
-          modals = _state.modals,
-          activeKeys = _state.activeKeys;
-
-      switch (operate) {
-        case 'add':
-          config.onOk = this.getAction(config.onOk, config);
-          config.onCancel = this.getAction(config.onCancel, config);
-          if (config.visible === undefined) {
-            config.visible = true;
-          }
-          modals[config.key] = config;
-          activeKeys.push(config.key);
-          this.setState({
-            timestamp: +new Date().getTime()
-          });
-          break;
-        case 'update':
-          modals[config.key] = Object.assign({}, modals[config.key], config);
-          var idx = activeKeys.indexOf(config.key);
-          if (idx) {
-            activeKeys.splice(idx, 1);
-          }
-          activeKeys.push(config.key);
-          this.setState({
-            timestamp: +new Date().getTime()
-          });
-          break;
-        case 'delete':
-          delete modals[config.key];
-          activeKeys.pop();
-          this.setState({
-            timestamp: +new Date().getTime()
-          });
-          break;
-        default:
-          break;
-      }
-    }
-  }, {
-    key: 'getAction',
-    value: function getAction(actionFn, config) {
-      var _this2 = this;
-
-      var closeModal = function closeModal() {
-        _this2.applyChange(config, 'delete');
-      };
-      return function () {
-        if (actionFn) {
-          var ret = actionFn(closeModal);
-          if (ret && ret.then) {
-            _this2.applyChange({ key: config.key, confirmLoading: true }, 'update');
-            ret.then(function () {
-              // It's unnecessary to set loading=false, for the Modal will be unmounted after
-              // close. this.update({   key: config.key,   confirmLoading: false });
-              closeModal();
-            }, function () {
-              _this2.applyChange({ key: config.key, confirmLoading: false }, 'update');
-            });
-          } else if (ret !== false) {
-            if (_this2.state.modals[config.key]) {
-              closeModal();
-            }
-          }
-        } else {
-          closeModal();
-        }
-      };
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this3 = this;
-
-      var modals = this.state.modals;
-      return _react2.default.createElement(
-        'div',
-        null,
-        Object.keys(modals).map(function (key) {
-          return _react2.default.createElement(
-            _this3.props.component,
-            _extends({}, modals[key], { key: key }),
-            _react2.default.createElement(
-              'div',
-              { className: (modals[key].prefixCls || 'j-com-modal') + '-body-wrapper' },
-              modals[key].content
-            )
-          );
-        })
-      );
-    }
-  }]);
-
-  return GModal;
-}(_react2.default.PureComponent), _class.propTypes = {
-  component: _propTypes2.default.any,
-  width: _propTypes2.default.any
-}, _class.defaultProps = {
-  component: _modal2.default
-}, _temp);
-
-
-['open', 'info', 'success', 'error', 'warning', 'confirm'].forEach(function (action) {
-  GModal[action] = function (props) {
-    return iModal[action](props);
-  };
-});
+module.exports = require("antd/lib/modal");
 
 /***/ }),
 /* 93 */
@@ -10611,8 +10611,6 @@ var _react2 = _interopRequireDefault(_react);
 
 var _modal = __webpack_require__(40);
 
-var _modal2 = _interopRequireDefault(_modal);
-
 var _dataSet = __webpack_require__(32);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -10656,7 +10654,7 @@ var HocCreator = exports.HocCreator = function () {
         content: _react2.default.createElement(Widget, modalOption.childProps)
       }, modalOption.modalProps);
 
-      var modal = _modal2.default[modalType](option);
+      var modal = _modal.GModal[modalType](option);
 
       // 多个对话框可以叠加
       if (modalOption.standalone) {
