@@ -20,7 +20,6 @@ app.ready = bootstrap(
   },
   'global_demo_version'
 );
-
 app.ready(({versionKey, prefix, dom}) => {
   if ([0, 1].indexOf(window.location.pathname.indexOf(prefix)) > -1) {
     if (versionKey && window.CONFIG && window.CONFIG.VERSION) {

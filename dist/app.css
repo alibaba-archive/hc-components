@@ -141,8 +141,8 @@
 }
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .j-com-exception {
   display: flex;
   align-items: center;
@@ -154,16 +154,13 @@
   padding-right: 152px;
   zoom: 1;
 }
-.j-com-exception .imgBlock:before,
-.j-com-exception .imgBlock:after {
-  content: " ";
+.j-com-exception .imgBlock::before,
+.j-com-exception .imgBlock::after {
+  content: '';
   display: table;
 }
-.j-com-exception .imgBlock:after {
+.j-com-exception .imgBlock::after {
   clear: both;
-  visibility: hidden;
-  font-size: 0;
-  height: 0;
 }
 .j-com-exception .imgEle {
   height: 360px;
@@ -290,8 +287,8 @@
 }
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .j-com-globalFooter {
   padding: 0 16px;
   margin: 48px 0 24px 0;
@@ -316,8 +313,8 @@
 }
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .j-com-headerSearch .anticon-search {
   cursor: pointer;
   font-size: 16px;
@@ -348,8 +345,8 @@
 }
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .j-com-header.ant-layout-header {
   padding: 0 12px 0 0;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
@@ -428,8 +425,8 @@
 }
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .j-com-result {
   text-align: center;
   width: 72%;
@@ -1068,8 +1065,8 @@
     -webkit-transform: scale(1);
             transform: scale(1); } }/* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .ant-layout-header .j-sider-logo {
   background: transparent;
   float: left;
@@ -1108,8 +1105,8 @@
 }
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .j-layout-content .j-footer {
   width: 100%;
   bottom: 0;
@@ -1196,8 +1193,8 @@
 }
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
-/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
 .j-layout-landing {
   background: #f0f2f5;
   width: 100%;

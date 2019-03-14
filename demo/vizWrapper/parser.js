@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import {PropTypes} from 'react';
 import _PropTypes from 'prop-types';
 
 const propTypesMap = {};
@@ -11,8 +11,9 @@ const overrideMap = {
   shape: true,
   exact: true
 }
-function hackType(key, propTypes){
-  if(overrideMap[key]){
+
+function hackType(key, propTypes) {
+  if (overrideMap[key]) {
     let checker = propTypes[key];
     propTypes[key] = (data) => {
       const result = checker(data);
@@ -29,14 +30,16 @@ function hackType(key, propTypes){
     };
   }
   propTypes[key].type = key;
-  if(propTypes[key].isRequired){
+  if (propTypes[key].isRequired) {
     propTypes[key].isRequired.type = key + 'Required';
   }
 }
 for (let key in PropTypes) {
   hackType(key, PropTypes)
-  
-  propTypesMap[key] = {type: key};
+
+  propTypesMap[key] = {
+    type: key
+  };
   propTypesMap[key + 'Required'] = {
     type: key,
     required: true
@@ -46,29 +49,29 @@ for (let key in _PropTypes) {
   hackType(key, _PropTypes)
 }
 
-function parseObject(obj){
+function parseObject(obj) {
   const schema = {
     type: 'object',
     properties: {}
   };
   let type;
-  for(let key in obj){
+  for (let key in obj) {
     type = typeof (obj[key]);
-    if(type === 'object'){
+    if (type === 'object') {
       schema.properties[key] = parseObject(obj[key]);
-    }else if(type === 'function'){
-      if(obj[key].isReactComponent){
+    } else if (type === 'function') {
+      if (obj[key].isReactComponent) {
         schema.properties[key] = {
           type: 'any',
           format: 'antd'
         }
-      }else{
+      } else {
         schema.properties[key] = {
           type: 'any',
           format: 'func'
         }
       }
-    }else{
+    } else {
       schema.properties[key] = {
         type: type
       }
@@ -99,11 +102,11 @@ export default function schemaParser(component, isRequired) {
         default: defaultProps[key]
       }
     }
-    if(prop.required || isRequired){
+    if (prop.required || isRequired) {
       schema.required.push(key);
     }
-    if(overrideMap[prop.type]){
-      switch(prop.type){
+    if (overrideMap[prop.type]) {
+      switch (prop.type) {
         case 'instanceOf':
         case 'objectOf':
         case 'oneOf':
@@ -113,7 +116,7 @@ export default function schemaParser(component, isRequired) {
           break;
         case 'oneOfType':
           const enums = component.propTypes[key].data.map(item => {
-            return item.type || typeof(item);
+            return item.type || typeof (item);
           });
           item.type = enums[Math.floor(Math.random(enums.length) * enums.length)];
           break;
@@ -124,7 +127,7 @@ export default function schemaParser(component, isRequired) {
           schema.definitions[key] = parseObject(component.propTypes[key].data);
           break;
       }
-    }else{
+    } else {
       item.type = prop.type;
     }
     schema.properties[key] = item;

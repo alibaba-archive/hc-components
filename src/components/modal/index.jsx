@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'antd/lib/modal';
 
+let iModal;
 export class GModal extends React.PureComponent {
   static propTypes = {
     component: PropTypes.any,
@@ -21,6 +22,7 @@ export class GModal extends React.PureComponent {
       modals: {}
     };
 
+    iModal = props.component;
     props.component.open = config => {
       config.key = config.key || (+new Date().getTime());
       config.width = config.width || this.props.width;
@@ -120,6 +122,8 @@ export class GModal extends React.PureComponent {
   }
 }
 
-['info', 'success', 'error', 'warning', 'confirm'].forEach(action => {
-  GModal[action] = Modal[action];
+['open', 'info', 'success', 'error', 'warning', 'confirm'].forEach(action => {
+  GModal[action] = (props) => {
+    return iModal[action](props);
+  };
 });

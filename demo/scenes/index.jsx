@@ -53,7 +53,6 @@ export default class Application extends React.PureComponent {
   static defaultProps = {
     orderKeys: [],
     appRoutes: [],
-    brand: {},
     subMenus: {}
   }
 
