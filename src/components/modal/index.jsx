@@ -119,3 +119,7 @@ export class GModal extends React.PureComponent {
     );
   }
 }
+
+['info', 'success', 'error', 'warning', 'confirm'].forEach(action => {
+  GModal[action] = Modal[action];
+});

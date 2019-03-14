@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal from 'antd/lib/modal';
+import {GModal} from '../../components/modal';
 import {DataSet} from '../../components/dataSet';
 
 export class HocCreator {
@@ -27,7 +27,7 @@ export class HocCreator {
       content: (<Widget {...modalOption.childProps} />),
     }, modalOption.modalProps);
 
-    const modal = Modal[modalType](option);
+    const modal = GModal[modalType](option);
 
     // 多个对话框可以叠加
     if (modalOption.standalone) {
