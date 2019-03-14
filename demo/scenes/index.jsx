@@ -7,7 +7,7 @@ import Beatle from 'beatle';
 import Modal from 'antd/lib/modal';
 
 import DocumentTitle from 'react-document-title';
-import {bootstrap, GModal, LoadingBar, getLayout, BreadCrumb, Sider, Layer, Cascader, HocCreator, RouteHelper, Resizer} from '../../src';
+import {bootstrap, GModal, LoadingBar, getLayout, BreadCrumb, Sider, Cascader, HocCreator, RouteHelper, Resizer} from '../../src';
 
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -53,7 +53,12 @@ export default class Application extends React.PureComponent {
   static defaultProps = {
     orderKeys: [],
     appRoutes: [],
-    subMenus: {}
+    subMenus: {
+      antd: {
+        icon: 'appstore-o',
+        title: 'antd组件'
+      }
+    }
   }
 
   static childContextTypes = {
@@ -80,7 +85,7 @@ export default class Application extends React.PureComponent {
         l20n: l20n,
         navs: this.props.children ? BreadCrumb.parse(this.props.children.props.route, this.props.subMenus) : [],
         subMenus: this.props.subMenus,
-        layer: new Layer(this.context),
+        layer: this.context.app.layer,
         resizer: new Resizer(),
         cascader: new Cascader(),
         hocCreator: new HocCreator(),
@@ -194,3 +199,4 @@ export default class Application extends React.PureComponent {
     );
   }
 }
+

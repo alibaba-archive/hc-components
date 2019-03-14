@@ -15,11 +15,12 @@ var webpackOpts = {
   // inline-source-map 调试的时候需要，为每个文件加一个sourcemap的DataUrl，ps：是打包前的每个文件
   devtool: 'none',
   module: {
-    noParse: [/moment.js/],
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: function (modulePath) {
+          return /node_modules/.test(modulePath) && !/hc-mocker/.test(modulePath);
+        },
         use: {
           loader: 'babel-loader',
           options: {

@@ -393,6 +393,7 @@ function formatLayerLoop(modules, layerOption, widgetsOption, dataQuery) {
 
 
 export const converter = {
+  transform: (code) => code,
   stringify: (obj) => {
     try {
       if (Object(obj) === obj) {

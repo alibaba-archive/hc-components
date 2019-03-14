@@ -1,3 +1,4 @@
+/* eslint-disable react/no-deprecated */
 import {PropTypes} from 'react';
 import _PropTypes from 'prop-types';
 
@@ -10,7 +11,7 @@ const overrideMap = {
   oneOfType: true,
   shape: true,
   exact: true
-}
+};
 
 function hackType(key, propTypes) {
   if (overrideMap[key]) {
@@ -20,7 +21,7 @@ function hackType(key, propTypes) {
       result.data = data;
       result.type = key;
       return result;
-    }
+    };
     propTypes[key].isRequired = (data) => {
       const requiredResult = checker.isRequired(data);
       requiredResult.data = data;
@@ -35,7 +36,7 @@ function hackType(key, propTypes) {
   }
 }
 for (let key in PropTypes) {
-  hackType(key, PropTypes)
+  hackType(key, PropTypes);
 
   propTypesMap[key] = {
     type: key
@@ -46,7 +47,7 @@ for (let key in PropTypes) {
   };
 }
 for (let key in _PropTypes) {
-  hackType(key, _PropTypes)
+  hackType(key, _PropTypes);
 }
 
 function parseObject(obj) {
@@ -64,17 +65,17 @@ function parseObject(obj) {
         schema.properties[key] = {
           type: 'any',
           format: 'antd'
-        }
+        };
       } else {
         schema.properties[key] = {
           type: 'any',
           format: 'func'
-        }
+        };
       }
     } else {
       schema.properties[key] = {
         type: type
-      }
+      };
     }
   }
 }
@@ -87,7 +88,9 @@ export default function schemaParser(component, isRequired) {
     definitions: {}
   };
   const defaultProps = component.defaultProps || {};
-  let item, prop;
+  let item;
+  let prop;
+  let enums;
   for (let key in component.propTypes) {
     prop = propTypesMap[component.propTypes[key].type];
     if (defaultProps[key] === undefined) {
@@ -100,7 +103,7 @@ export default function schemaParser(component, isRequired) {
         title: key,
         name: key,
         default: defaultProps[key]
-      }
+      };
     }
     if (prop.required || isRequired) {
       schema.required.push(key);
@@ -111,11 +114,11 @@ export default function schemaParser(component, isRequired) {
         case 'objectOf':
         case 'oneOf':
         case 'arrayOf':
-          item.type = 'any'
+          item.type = 'any';
           item.enum = component.propTypes[key].data;
           break;
         case 'oneOfType':
-          const enums = component.propTypes[key].data.map(item => {
+          enums = component.propTypes[key].data.map(item => {
             return item.type || typeof (item);
           });
           item.type = enums[Math.floor(Math.random(enums.length) * enums.length)];
