@@ -276,8 +276,12 @@ function getComponent(option, getProps) {
   return decorator;
 }
 
-function EmptyComponent() {
-  return _react2.default.createElement('div', null);
+function EmptyComponent(props) {
+  return _react2.default.createElement(
+    'span',
+    null,
+    props.children
+  );
 }
 getComponent.emptyComponent = EmptyComponent;
 

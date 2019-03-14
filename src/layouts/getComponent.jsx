@@ -86,8 +86,8 @@ export function getComponent(option, getProps) {
   return decorator;
 }
 
-function EmptyComponent() {
-  return (<div></div>);
+function EmptyComponent(props) {
+  return (<span>{props.children}</span>);
 }
 getComponent.emptyComponent = EmptyComponent;
 
