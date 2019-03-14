@@ -4478,7 +4478,8 @@ function bootstrap(app, getInitData, versionKey, inters) {
 }
 
 bootstrap.getPrefix = function (app, name) {
-  return window.CONFIG.prefix || (window.CONFIG.root || 'oa') + '/' + (name || app.appName);
+  var o = window.CONFIG || {};
+  return o.prefix || (o.root || 'oa') + '/' + (name || app.appName);
 };
 
 bootstrap.getResolvePath = function (app, name) {
@@ -8439,6 +8440,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var iModal = void 0;
 var GModal = exports.GModal = (_temp = _class = function (_React$PureComponent) {
   _inherits(GModal, _React$PureComponent);
 
@@ -8453,6 +8455,7 @@ var GModal = exports.GModal = (_temp = _class = function (_React$PureComponent) 
       modals: {}
     };
 
+    iModal = props.component;
     props.component.open = function (config) {
       config.key = config.key || +new Date().getTime();
       config.width = config.width || _this.props.width;
@@ -8573,6 +8576,13 @@ var GModal = exports.GModal = (_temp = _class = function (_React$PureComponent) 
 }, _class.defaultProps = {
   component: _modal2.default
 }, _temp);
+
+
+['open', 'info', 'success', 'error', 'warning', 'confirm'].forEach(function (action) {
+  GModal[action] = function (props) {
+    return iModal[action](props);
+  };
+});
 
 /***/ }),
 /* 93 */
