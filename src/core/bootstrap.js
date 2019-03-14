@@ -91,7 +91,8 @@ export function bootstrap(app, getInitData, versionKey, inters) {
 }
 
 bootstrap.getPrefix = (app, name) => {
-  return window.CONFIG.prefix || ((window.CONFIG.root || 'oa') + '/' + (name || app.appName));
+  const o = window.CONFIG || {};
+  return o.prefix || ((o.root || 'oa') + '/' + (name || app.appName));
 };
 
 bootstrap.getResolvePath = (app, name) => {
