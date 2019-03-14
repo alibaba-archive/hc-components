@@ -40,7 +40,8 @@ export class Header extends React.PureComponent {
     nick: PropTypes.string,
     noSider: PropTypes.bool,
     loading: PropTypes.element,
-    theme: PropTypes.string
+    theme: PropTypes.string,
+    onChange: PropTypes.func
   }
 
   static defaultProps = {
@@ -51,7 +52,7 @@ export class Header extends React.PureComponent {
     super(props);
   }
 
-  toggleClick() {
+  toggleClick = () => {
     this
       .props
       .onCollapse(!this.props.collapsed);
@@ -67,7 +68,9 @@ export class Header extends React.PureComponent {
     clearTimeout(this._resizeTimer);
   }
 
-  handleSearch() {}
+  handleChange = (e) => {
+    this.props.onChange && this.props.onChange(e);
+  }
 
   render() {
     const {loading, className, style, collapsed, nick, noSider, avatar, theme, route, routes, subMenus, menu, brand, Link, orderKeys, getResolvePath} = this.props;
@@ -78,25 +81,25 @@ export class Header extends React.PureComponent {
         {noSider ? null : (<Icon
           className='j-header-trigger'
           type={collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={this.toggleClick.bind(this)} />)}
+          onClick={this.toggleClick} />)}
         <div className='j-header-right' style={{display: nick === false ? 'none' : ''}}>
           <HeaderSearch
             className='j-header-action j-header-search'
             placeholder={this.getLocale('searchPlaceholder')}
             dataSource={[]}
-            onSearch={this.handleSearch.bind(this)}
-            onPressEnter={this.handleSearch.bind(this)} /> {nick ? (
+            onSearch={v => this.handleChange({value: v, key: 'search'})}
+            onPressEnter={v => this.handleChange({value: v, key: 'search'})} /> {nick ? (
             <Dropdown
               overlay={(
-                <Menu className='j-header-menu' selectedKeys={[]}>
-                  <Menu.Item disabled><Icon type="user" />{this.getLocale('profile')}</Menu.Item>
-                  <Menu.Item disabled><Icon type="setting" />{this.getLocale('setting')}</Menu.Item>
+                <Menu className='j-header-menu' selectedKeys={[]} onClick={this.handleChange}>
+                  <Menu.Item key="profile"><Icon type="user" />{this.getLocale('profile')}</Menu.Item>
+                  <Menu.Item key="setting"><Icon type="setting" />{this.getLocale('setting')}</Menu.Item>
                   <Menu.Divider />
                   <Menu.Item key="logout"><Icon type="logout" />{this.getLocale('logout')}</Menu.Item>
                 </Menu>
               )}>
               <span className='j-header-action j-header-account'>
-                <Avatar size="small" className='j-header-avatar' src={avatar} /> {nick}
+                {avatar && (<Avatar size="small" className='j-header-avatar' src={avatar} />)} {nick}
               </span>
             </Dropdown>
           ) : (<Spin size="small" style={{marginLeft: 8}} />)}

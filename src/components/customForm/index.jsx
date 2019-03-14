@@ -69,6 +69,7 @@ class CustomFormBase extends React.PureComponent {
     compact: true,
     rules: {},
     normalize: true,
+    options: [],
     formLayout: {
       labelCol: {
         span: 4

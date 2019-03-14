@@ -897,6 +897,9 @@ function formatLayerLoop(modules, layerOption, widgetsOption, dataQuery) {
 }
 
 var converter = exports.converter = {
+  transform: function transform(code) {
+    return code;
+  },
   stringify: function stringify(obj) {
     try {
       if (Object(obj) === obj) {
@@ -1731,31 +1734,35 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
   function Header(props) {
     _classCallCheck(this, Header);
 
-    return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
-  }
+    var _this = _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).call(this, props));
 
-  _createClass(Header, [{
-    key: 'toggleClick',
-    value: function toggleClick() {
-      this.props.onCollapse(!this.props.collapsed);
+    _this.toggleClick = function () {
+      _this.props.onCollapse(!_this.props.collapsed);
 
-      this._resizeTimer = setTimeout(function () {
+      _this._resizeTimer = setTimeout(function () {
         var event = document.createEvent('HTMLEvents');
         event.initEvent('resize', true, false);
         window.dispatchEvent(event);
       }, 600);
-    }
-  }, {
+    };
+
+    _this.handleChange = function (e) {
+      _this.props.onChange && _this.props.onChange(e);
+    };
+
+    return _this;
+  }
+
+  _createClass(Header, [{
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
       clearTimeout(this._resizeTimer);
     }
   }, {
-    key: 'handleSearch',
-    value: function handleSearch() {}
-  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var _props = this.props,
           loading = _props.loading,
           className = _props.className,
@@ -1782,7 +1789,7 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
         noSider ? null : _react2.default.createElement(_icon2.default, {
           className: 'j-header-trigger',
           type: collapsed ? 'menu-unfold' : 'menu-fold',
-          onClick: this.toggleClick.bind(this) }),
+          onClick: this.toggleClick }),
         _react2.default.createElement(
           'div',
           { className: 'j-header-right', style: { display: nick === false ? 'none' : '' } },
@@ -1790,24 +1797,28 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
             className: 'j-header-action j-header-search',
             placeholder: this.getLocale('searchPlaceholder'),
             dataSource: [],
-            onSearch: this.handleSearch.bind(this),
-            onPressEnter: this.handleSearch.bind(this) }),
+            onSearch: function onSearch(v) {
+              return _this2.handleChange({ value: v, key: 'search' });
+            },
+            onPressEnter: function onPressEnter(v) {
+              return _this2.handleChange({ value: v, key: 'search' });
+            } }),
           ' ',
           nick ? _react2.default.createElement(
             _dropdown2.default,
             {
               overlay: _react2.default.createElement(
                 _menu2.default,
-                { className: 'j-header-menu', selectedKeys: [] },
+                { className: 'j-header-menu', selectedKeys: [], onClick: this.handleChange },
                 _react2.default.createElement(
                   _menu2.default.Item,
-                  { disabled: true },
+                  { key: 'profile' },
                   _react2.default.createElement(_icon2.default, { type: 'user' }),
                   this.getLocale('profile')
                 ),
                 _react2.default.createElement(
                   _menu2.default.Item,
-                  { disabled: true },
+                  { key: 'setting' },
                   _react2.default.createElement(_icon2.default, { type: 'setting' }),
                   this.getLocale('setting')
                 ),
@@ -1822,7 +1833,7 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
             _react2.default.createElement(
               'span',
               { className: 'j-header-action j-header-account' },
-              _react2.default.createElement(_avatar2.default, { size: 'small', className: 'j-header-avatar', src: avatar }),
+              avatar && _react2.default.createElement(_avatar2.default, { size: 'small', className: 'j-header-avatar', src: avatar }),
               ' ',
               nick
             )
@@ -1853,7 +1864,8 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
   nick: _propTypes2.default.string,
   noSider: _propTypes2.default.bool,
   loading: _propTypes2.default.element,
-  theme: _propTypes2.default.string
+  theme: _propTypes2.default.string,
+  onChange: _propTypes2.default.func
 }, _class2.defaultProps = {
   className: ''
 }, _temp)) || _class);
@@ -3277,6 +3289,7 @@ var CustomFormBase = (_dec = (0, _localeContext.localeContext)('CustomForm', {
   compact: true,
   rules: {},
   normalize: true,
+  options: [],
   formLayout: {
     labelCol: {
       span: 4
@@ -4655,11 +4668,12 @@ function bootstrap(app, getInitData, versionKey, inters) {
 
 bootstrap.getPrefix = function (app, name) {
   var o = window.CONFIG || {};
-  return o.prefix || (o.root || 'oa') + '/' + (name || app.appName);
+  return o.prefix + (name ? '/' + name : '') || (o.root || 'oa') + '/' + (name || app.appName);
 };
 
 bootstrap.getResolvePath = function (app, name) {
-  return '/' + bootstrap.getPrefix(app, name);
+  var resolvePath = bootstrap.getPrefix(app, name);
+  return resolvePath[0] === '/' ? resolvePath : '/' + resolvePath;
 };
 
 /***/ }),
