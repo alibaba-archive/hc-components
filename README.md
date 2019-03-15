@@ -1,4 +1,5 @@
-<!-- (function () {
+```javascript
+(function () {
   const CONFIG = window.CONFIG || {};
   /* eslint-disable no-undef,camelcase */
   if (!CONFIG.standalone && CONFIG.staticPath) {
@@ -10,4 +11,6 @@
       __webpack_public_path__ = window.__static_public_path__ = '//g-assets.daily.taobao.net/openad/oa-ui/' +  CONFIG.name + '/0.0.1/';
     }
   }
-})(); -->
+})();
+
+```
