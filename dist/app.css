@@ -1208,7 +1208,10 @@
   text-align: center;
 }
 .j-layout-landing .ant-layout-header {
-  background: white;
+  background: #ffffff;
+}
+.j-layout-landing .ant-layout-header .j-sider-logo {
+  margin-left: 20px;
 }
 .j-layout-landing .ant-layout-header .j-sider-logo h1 {
   color: #666;

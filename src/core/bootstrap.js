@@ -2,7 +2,6 @@ import Notification from 'antd/lib/notification';
 import message from 'antd/lib/message';
 import {fallbackRoutes} from './fallbackRoutes';
 import {crud} from 'beatle';
-import {staticPublicPath} from './staticPublicPath';
 import {Layer} from '../layers';
 
 export function bootstrap(app, getInitData, versionKey, inters) {
@@ -36,7 +35,6 @@ export function bootstrap(app, getInitData, versionKey, inters) {
     }
   }
 
-  staticPublicPath(app.appName);
   app
     .ajax
     .set('beforeRequest', (ajaxOption) => {
