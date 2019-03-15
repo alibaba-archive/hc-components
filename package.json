@@ -1,6 +1,6 @@
 {
     "name": "hc-components",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "main": "./dist/hcComponent.js",
     "author": "dtboost <dtboost@aliyun.com>",
     "description": "基于react的通用组件库",
@@ -24,17 +24,17 @@
       "lodash": "4.17.4",
       "async-validator": "1.8.2",
       "classnames": "2.2.5",
-      "antd": "3.0.0",
       "react-joyride": "1.11.2",
       "url": "0.11.0",
-      "material-ui": "0.20.1",
-      "beatle": "1.2.29"
+      "material-ui": "0.20.1"
     },
     "peerDependencies": {
       "react": ">=15.0.0",
       "react-dom": ">=15.0.0"
     },
     "devDependencies": {
+      "beatle": "1.2.31",
+      "antd": "3.15.0",
       "react": "15.5.0",
       "react-dom": "15.5.0",
       "babel-eslint": "8.0.3",

@@ -276,6 +276,7 @@ function getComponent(option, getProps) {
   return decorator;
 }
 
+/* eslint-disable react/prop-types */
 function EmptyComponent(props) {
   return _react2.default.createElement(
     'span',
@@ -3684,11 +3685,7 @@ var DataSet = exports.DataSet = (_temp = _class = function (_React$PureComponent
     _this.stateUpdater = {};
 
     if (props.getResolver) {
-      var resolver = props.getResolver(props.defaultValue);
-      resolver.then(function (iState) {
-        iState.pending = false;
-        _this.setState(iState, _this.props.onChange);
-      });
+      _this._resolver = props.getResolver(props.defaultValue);
     }
     /**
      * prop = {
@@ -3728,6 +3725,16 @@ var DataSet = exports.DataSet = (_temp = _class = function (_React$PureComponent
   }
 
   _createClass(DataSet, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this._resolver && this._resolver.then(function (iState) {
+        iState.pending = false;
+        _this2.setState(iState, _this2.props.onChange);
+      });
+    }
+  }, {
     key: 'getFormatter',
     value: function getFormatter(formatter, name) {
       if (!formatter && DataSet.formatter) {
@@ -3744,7 +3751,7 @@ var DataSet = exports.DataSet = (_temp = _class = function (_React$PureComponent
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var option = {};
       var _props = this.props,
@@ -3764,7 +3771,7 @@ var DataSet = exports.DataSet = (_temp = _class = function (_React$PureComponent
             Component,
             _extends({
               ref: function ref(instance) {
-                return _this2._instance = instance;
+                return _this3._instance = instance;
               }
             }, option, childProps, this.state, this.stateUpdater),
             children
@@ -3772,7 +3779,7 @@ var DataSet = exports.DataSet = (_temp = _class = function (_React$PureComponent
         } else {
           return _react2.default.createElement(Component, _extends({
             ref: function ref(instance) {
-              return _this2._instance = instance;
+              return _this3._instance = instance;
             }
           }, option, childProps, this.state, this.stateUpdater));
         }
@@ -3783,7 +3790,7 @@ var DataSet = exports.DataSet = (_temp = _class = function (_React$PureComponent
         }
         return _react2.default.cloneElement(_react2.default.Children.only(children), _extends({
           ref: function ref(instance) {
-            _this2._instance = instance;
+            _this3._instance = instance;
             if (typeof children.ref === 'function') {
               children.ref(instance);
             }
@@ -4672,7 +4679,8 @@ function bootstrap(app, getInitData, versionKey, inters) {
 
 bootstrap.getPrefix = function (app, name) {
   var o = window.CONFIG || {};
-  return o.prefix + (name ? '/' + name : '') || (o.root || 'oa') + '/' + (name || app.appName);
+  var prefix = o.prefix || '';
+  return prefix + (name ? '/' + name : '') || (o.root || 'oa') + '/' + (name || app.appName);
 };
 
 bootstrap.getResolvePath = function (app, name) {

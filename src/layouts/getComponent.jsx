@@ -86,6 +86,7 @@ export function getComponent(option, getProps) {
   return decorator;
 }
 
+/* eslint-disable react/prop-types */
 function EmptyComponent(props) {
   return (<span>{props.children}</span>);
 }

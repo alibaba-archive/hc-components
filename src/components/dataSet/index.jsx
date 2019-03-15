@@ -39,11 +39,7 @@ export class DataSet extends React.PureComponent {
     this.stateUpdater = {};
 
     if (props.getResolver) {
-      const resolver = props.getResolver(props.defaultValue);
-      resolver.then(iState => {
-        iState.pending = false;
-        this.setState(iState, this.props.onChange);
-      });
+      this._resolver = props.getResolver(props.defaultValue);
     }
     /**
      * prop = {
@@ -78,6 +74,13 @@ export class DataSet extends React.PureComponent {
           }, callback));
         }
       });
+  }
+
+  componentDidMount() {
+    this._resolver && this._resolver.then(iState => {
+      iState.pending = false;
+      this.setState(iState, this.props.onChange);
+    });
   }
 
   handleResolve = (value, params) => {
