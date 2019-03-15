@@ -5994,8 +5994,7 @@ var styles = {
   },
   content: {
     flexGrow: 1,
-    padding: 0,
-    minHeight: document.body.offsetHeight - 107
+    padding: 0
   },
   'contentShift-left': {
     marginLeft: 0
@@ -6164,7 +6163,9 @@ var FlexContentLayout = exports.FlexContentLayout = (_temp = _class = function (
           _react2.default.createElement(
             'main',
             {
-              style: Object.assign({}, styles.content, mainStyle, openLeft ? { marginLeft: drawerWidth } : styles['contentShift-left'], openRight ? { marginRight: drawerWidth } : styles['contentShift-right'])
+              style: Object.assign({
+                minHeight: document.body.offsetHeight - 107
+              }, styles.content, mainStyle, openLeft ? { marginLeft: drawerWidth } : styles['contentShift-left'], openRight ? { marginRight: drawerWidth } : styles['contentShift-right'])
             },
             _react2.default.createElement('div', { style: styles.drawerHeader }),
             _react2.default.createElement(

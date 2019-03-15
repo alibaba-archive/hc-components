@@ -50,7 +50,6 @@ const styles = {
   content: {
     flexGrow: 1,
     padding: 0,
-    minHeight: document.body.offsetHeight - 107
   },
   'contentShift-left': {
     marginLeft: 0,
@@ -199,7 +198,9 @@ export class FlexContentLayout extends BasicLayout {
           {beforeDrawer}
           <main
             style={Object.assign(
-              {},
+              {
+                minHeight: document.body.offsetHeight - 107
+              },
               styles.content,
               mainStyle,
               openLeft ? {marginLeft: drawerWidth} : styles['contentShift-left'],
