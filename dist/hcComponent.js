@@ -7104,7 +7104,7 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
       if (this.props.formatter) {
         return this.props.formatter(value);
       } else {
-        return option.render ? option.render(value, name) : value;
+        return option.render ? option.render(value, this.state.dataSource) : value;
       }
     }
   }, {

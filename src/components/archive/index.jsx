@@ -64,7 +64,7 @@ class IArchive extends React.PureComponent {
     if (this.props.formatter) {
       return this.props.formatter(value);
     } else {
-      return option.render ? option.render(value, name) : value;
+      return option.render ? option.render(value, this.state.dataSource) : value;
     }
   }
 
