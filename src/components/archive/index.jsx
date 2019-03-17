@@ -70,7 +70,7 @@ class IArchive extends React.PureComponent {
 
   getFieldInput(name, option) {
     const {form, readonly, onChange} = this.props;
-    const editable = option.editable || !readonly;
+    const editable = option.editable === undefined ? !readonly : option.editable;
 
     if (editable) {
       /**
@@ -159,8 +159,9 @@ class IArchive extends React.PureComponent {
     } else {
       buttonProps.onSubmit = this.handleSubmit;
     }
+    const justify = buttonProps.align || 'end';
     const _buttons = CustomForm.getButtons(buttons, buttonProps);
-    return _buttons ? (<Row justify="end" type="flex">{_buttons}</Row>) : null;
+    return _buttons ? (<Row justify={justify} type="flex" className="o-com-archive_btns">{_buttons}</Row>) : null;
   }
 
   render() {

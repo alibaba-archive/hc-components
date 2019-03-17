@@ -7117,7 +7117,7 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
           readonly = _props.readonly,
           onChange = _props.onChange;
 
-      var editable = option.editable || !readonly;
+      var editable = option.editable === undefined ? !readonly : option.editable;
 
       if (editable) {
         /**
@@ -7207,10 +7207,11 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
       } else {
         buttonProps.onSubmit = this.handleSubmit;
       }
+      var justify = buttonProps.align || 'end';
       var _buttons = _customForm.CustomForm.getButtons(buttons, buttonProps);
       return _buttons ? _react2.default.createElement(
         _row2.default,
-        { justify: 'end', type: 'flex' },
+        { justify: justify, type: 'flex', className: 'o-com-archive_btns' },
         _buttons
       ) : null;
     }

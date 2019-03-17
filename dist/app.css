@@ -58,6 +58,9 @@
   bottom: 0;
   right: 20px;
 }
+.ant-form.o-com-archive .o-com-archive_btns .ant-btn {
+  margin-right: 10px;
+}
 .j-com-nav-link {
   margin-left: 0;
   white-space: nowrap;
