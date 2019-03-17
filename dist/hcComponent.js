@@ -7211,7 +7211,7 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
       var _buttons = _customForm.CustomForm.getButtons(buttons, buttonProps);
       return _buttons ? _react2.default.createElement(
         _row2.default,
-        { justify: justify, type: 'flex', className: 'o-com-archive_btns' },
+        { justify: justify, type: 'flex', className: 'o-com-archive_btns', style: buttonProps.btnStyle },
         _buttons
       ) : null;
     }

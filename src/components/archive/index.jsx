@@ -161,7 +161,7 @@ class IArchive extends React.PureComponent {
     }
     const justify = buttonProps.align || 'end';
     const _buttons = CustomForm.getButtons(buttons, buttonProps);
-    return _buttons ? (<Row justify={justify} type="flex" className="o-com-archive_btns">{_buttons}</Row>) : null;
+    return _buttons ? (<Row justify={justify} type="flex" className="o-com-archive_btns" style={buttonProps.btnStyle}>{_buttons}</Row>) : null;
   }
 
   render() {
