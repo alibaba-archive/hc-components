@@ -41,7 +41,9 @@ export class Header extends React.PureComponent {
     noSider: PropTypes.bool,
     loading: PropTypes.element,
     theme: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    hasSetting: PropTypes.bool,
+    noSearch: PropTypes.bool
   }
 
   static defaultProps = {
@@ -73,7 +75,7 @@ export class Header extends React.PureComponent {
   }
 
   render() {
-    const {loading, className, style, collapsed, nick, noSider, avatar, theme, route, routes, subMenus, menu, brand, Link, orderKeys, getResolvePath} = this.props;
+    const {loading, className, hasSetting, noSearch, style, collapsed, nick, noSider, avatar, theme, route, routes, subMenus, menu, brand, Link, orderKeys, getResolvePath} = this.props;
     const IMenu = this.props.Menu;
     return (
       <Layout.Header className={'j-com-header ' + className + (theme ? ' j-com-header-' + theme : '')} style={style} >
@@ -83,17 +85,19 @@ export class Header extends React.PureComponent {
           type={collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={this.toggleClick} />)}
         <div className='j-header-right' style={{display: nick === false ? 'none' : ''}}>
-          <HeaderSearch
+          {noSearch ? null : (<HeaderSearch
             className='j-header-action j-header-search'
             placeholder={this.getLocale('searchPlaceholder')}
             dataSource={[]}
             onSearch={v => this.handleChange({value: v, key: 'search'})}
-            onPressEnter={v => this.handleChange({value: v, key: 'search'})} /> {nick ? (
+            onPressEnter={v => this.handleChange({value: v, key: 'search'})}
+          />)
+          }{nick ? (
             <Dropdown
               overlay={(
                 <Menu className='j-header-menu' selectedKeys={[]} onClick={this.handleChange}>
                   <Menu.Item key="profile"><Icon type="user" />{this.getLocale('profile')}</Menu.Item>
-                  <Menu.Item key="setting"><Icon type="setting" />{this.getLocale('setting')}</Menu.Item>
+                  {hasSetting ? (<Menu.Item key="setting"><Icon type="setting" />{this.getLocale('setting')}</Menu.Item>) : null}
                   <Menu.Divider />
                   <Menu.Item key="logout"><Icon type="logout" />{this.getLocale('logout')}</Menu.Item>
                 </Menu>

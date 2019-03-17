@@ -1771,6 +1771,8 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
       var _props = this.props,
           loading = _props.loading,
           className = _props.className,
+          hasSetting = _props.hasSetting,
+          noSearch = _props.noSearch,
           style = _props.style,
           collapsed = _props.collapsed,
           nick = _props.nick,
@@ -1798,7 +1800,7 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
         _react2.default.createElement(
           'div',
           { className: 'j-header-right', style: { display: nick === false ? 'none' : '' } },
-          _react2.default.createElement(_headerSearch.HeaderSearch, {
+          noSearch ? null : _react2.default.createElement(_headerSearch.HeaderSearch, {
             className: 'j-header-action j-header-search',
             placeholder: this.getLocale('searchPlaceholder'),
             dataSource: [],
@@ -1807,8 +1809,8 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
             },
             onPressEnter: function onPressEnter(v) {
               return _this2.handleChange({ value: v, key: 'search' });
-            } }),
-          ' ',
+            }
+          }),
           nick ? _react2.default.createElement(
             _dropdown2.default,
             {
@@ -1821,12 +1823,12 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
                   _react2.default.createElement(_icon2.default, { type: 'user' }),
                   this.getLocale('profile')
                 ),
-                _react2.default.createElement(
+                hasSetting ? _react2.default.createElement(
                   _menu2.default.Item,
                   { key: 'setting' },
                   _react2.default.createElement(_icon2.default, { type: 'setting' }),
                   this.getLocale('setting')
-                ),
+                ) : null,
                 _react2.default.createElement(_menu2.default.Divider, null),
                 _react2.default.createElement(
                   _menu2.default.Item,
@@ -1870,7 +1872,9 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
   noSider: _propTypes2.default.bool,
   loading: _propTypes2.default.element,
   theme: _propTypes2.default.string,
-  onChange: _propTypes2.default.func
+  onChange: _propTypes2.default.func,
+  hasSetting: _propTypes2.default.bool,
+  noSearch: _propTypes2.default.bool
 }, _class2.defaultProps = {
   className: ''
 }, _temp)) || _class);
@@ -3164,8 +3168,8 @@ var CustomFormBase = (_dec = (0, _localeContext.localeContext)('CustomForm', {
           return v;
         }
       };
-      if (option.render) {
-        return option.render(option, function (node, dpros) {
+      if (option.renderInput) {
+        return option.renderInput(option, function (node, dpros) {
           return _react2.default.createElement(
             _form2.default.Item,
             _extends({ key: key }, formItemProps),

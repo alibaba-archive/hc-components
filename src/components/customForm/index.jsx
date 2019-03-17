@@ -527,8 +527,8 @@ class CustomFormBase extends React.PureComponent {
         return v;
       }
     };
-    if (option.render) {
-      return option.render(option, (node, dpros) => {
+    if (option.renderInput) {
+      return option.renderInput(option, (node, dpros) => {
         return (
           <Form.Item key={key} {...formItemProps}>{this
             .props
