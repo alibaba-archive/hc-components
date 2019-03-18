@@ -7103,12 +7103,16 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
     }
   }, {
     key: 'getFieldValue',
-    value: function getFieldValue(name, option) {
+    value: function getFieldValue(name, option, editable) {
       var value = this.state.dataSource[name] || option.value;
       if (this.props.formatter) {
         return this.props.formatter(value);
       } else {
-        return option.renderInput ? option.renderInput(value, this.state.dataSource) : value;
+        if (editable) {
+          return option.renderInput ? option.renderInput(value, this.state.dataSource) : value;
+        } else {
+          return option.render ? option.render(value, this.state.dataSource) : value;
+        }
       }
     }
   }, {
@@ -7150,7 +7154,7 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
             return v;
           };
         }
-        decorator.defaultValue = this.getFieldValue(name, option);
+        decorator.defaultValue = this.getFieldValue(name, option, editable);
         var stateProps = option.getProps ? option.getProps.call(this, this.props, this.state.dataSource, function (nextState) {
           _this2.setState({
             dataSource: Object.assign({}, _this2.state.dataSource, nextState)

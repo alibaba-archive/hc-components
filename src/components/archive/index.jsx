@@ -59,12 +59,16 @@ class IArchive extends React.PureComponent {
     }
   }
 
-  getFieldValue(name, option) {
+  getFieldValue(name, option, editable) {
     const value = this.state.dataSource[name] || option.value;
     if (this.props.formatter) {
       return this.props.formatter(value);
     } else {
-      return option.renderInput ? option.renderInput(value, this.state.dataSource) : value;
+      if (editable) {
+        return option.renderInput ? option.renderInput(value, this.state.dataSource) : value;
+      } else {
+        return option.render ? option.render(value, this.state.dataSource) : value;
+      }
     }
   }
 
@@ -99,7 +103,7 @@ class IArchive extends React.PureComponent {
           return v;
         };
       }
-      decorator.defaultValue = this.getFieldValue(name, option);
+      decorator.defaultValue = this.getFieldValue(name, option, editable);
       const stateProps = option.getProps ? option.getProps.call(this, this.props, this.state.dataSource, (nextState) => {
         this.setState({
           dataSource: Object.assign({}, this.state.dataSource, nextState)
