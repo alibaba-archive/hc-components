@@ -223,7 +223,7 @@ function getComponent(option, getProps) {
                 }
               }
             }, function (nextState) {
-              return _this2.setState({ stateProps: Object.assign(_this2.state.stateProps, nextState) });
+              return _this2.setState({ stateProps: Object.assign({}, _this2.state.stateProps, nextState) });
             });
           }
         }
@@ -254,7 +254,7 @@ function getComponent(option, getProps) {
           }
           var asyncProps = getProps ? getProps(newProps, this.context, function (nextProps) {
             _this3.setState({
-              stateProps: Object.assign(_this3.state.stateProps, nextProps)
+              stateProps: Object.assign({}, _this3.state.stateProps, nextProps)
             });
           }) : {};
           return _react2.default.createElement(Component, _extends({ ref: function ref(inst) {

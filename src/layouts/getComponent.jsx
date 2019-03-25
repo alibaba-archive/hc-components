@@ -47,7 +47,7 @@ export function getComponent(option, getProps) {
                 });
               }
             }
-          }, (nextState) => this.setState({stateProps: Object.assign(this.state.stateProps, nextState)}));
+          }, (nextState) => this.setState({stateProps: Object.assign({}, this.state.stateProps, nextState)}));
         }
       }
 
@@ -68,7 +68,7 @@ export function getComponent(option, getProps) {
         }
         const asyncProps = getProps ? getProps(newProps, this.context, (nextProps) => {
           this.setState({
-            stateProps: Object.assign(this.state.stateProps, nextProps)
+            stateProps: Object.assign({}, this.state.stateProps, nextProps)
           });
         }) : {};
         return (<Component ref={inst => this._wrappedComponent = inst} {...newProps} {...asyncProps} {...stateProps} />);
