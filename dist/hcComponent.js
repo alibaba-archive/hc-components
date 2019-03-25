@@ -194,19 +194,7 @@ function getComponent(option, getProps) {
             stateProps: {},
             Component: EmptyComponent
           };
-          var _getComponent = BaseComponent;
-          _this._defer = new Promise(function (resolve) {
-            _getComponent(context, function (err, component, props) {
-              if (err) {
-                window.console.error(err);
-              } else {
-                resolve({
-                  stateProps: props || {},
-                  Component: component
-                });
-              }
-            });
-          });
+          _this._getComponent = BaseComponent;
         } else {
           _this.state = {
             stateProps: {},
@@ -222,11 +210,22 @@ function getComponent(option, getProps) {
           var _this2 = this;
 
           this.mounted = true;
-          this._defer && this._defer.then(function (nextState) {
-            if (_this2.mounted) {
-              _this2.setState(nextState);
-            }
-          });
+          if (this._getComponent) {
+            this._getComponent(this.context, function (err, component, props) {
+              if (err) {
+                window.console.error(err);
+              } else {
+                if (_this2.mounted) {
+                  _this2.setState({
+                    stateProps: props || {},
+                    Component: component
+                  });
+                }
+              }
+            }, function (nextState) {
+              return _this2.setState({ stateProps: nextState });
+            });
+          }
         }
       }, {
         key: 'componentWillUnmount',
@@ -280,7 +279,7 @@ function getComponent(option, getProps) {
 function EmptyComponent(props) {
   return _react2.default.createElement(
     'span',
-    null,
+    { id: props.id },
     props.children
   );
 }
@@ -1772,7 +1771,7 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
           loading = _props.loading,
           className = _props.className,
           hasSetting = _props.hasSetting,
-          noSearch = _props.noSearch,
+          search = _props.search,
           style = _props.style,
           collapsed = _props.collapsed,
           nick = _props.nick,
@@ -1800,7 +1799,7 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
         _react2.default.createElement(
           'div',
           { className: 'j-header-right', style: { display: nick === false ? 'none' : '' } },
-          noSearch ? null : _react2.default.createElement(_headerSearch.HeaderSearch, {
+          search !== undefined ? search : _react2.default.createElement(_headerSearch.HeaderSearch, {
             className: 'j-header-action j-header-search',
             placeholder: this.getLocale('searchPlaceholder'),
             dataSource: [],
@@ -1874,7 +1873,7 @@ var Header = exports.Header = (_dec = (0, _localeContext.localeContext)('DataSet
   theme: _propTypes2.default.string,
   onChange: _propTypes2.default.func,
   hasSetting: _propTypes2.default.bool,
-  noSearch: _propTypes2.default.bool
+  search: _propTypes2.default.any
 }, _class2.defaultProps = {
   className: ''
 }, _temp)) || _class);

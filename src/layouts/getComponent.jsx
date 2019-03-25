@@ -25,19 +25,7 @@ export function getComponent(option, getProps) {
             stateProps: {},
             Component: EmptyComponent
           };
-          const getComponent = BaseComponent;
-          this._defer = new Promise(resolve => {
-            getComponent(context, (err, component, props) => {
-              if (err) {
-                window.console.error(err);
-              } else {
-                resolve({
-                  stateProps: props || {},
-                  Component: component
-                });
-              }
-            });
-          });
+          this._getComponent = BaseComponent;
         } else {
           this.state = {
             stateProps: {},
@@ -47,11 +35,20 @@ export function getComponent(option, getProps) {
       }
       componentDidMount() {
         this.mounted = true;
-        this._defer && this._defer.then(nextState => {
-          if (this.mounted) {
-            this.setState(nextState);
-          }
-        });
+        if (this._getComponent) {
+          this._getComponent(this.context, (err, component, props) => {
+            if (err) {
+              window.console.error(err);
+            } else {
+              if (this.mounted) {
+                this.setState({
+                  stateProps: props || {},
+                  Component: component
+                });
+              }
+            }
+          }, (nextState) => this.setState({stateProps: nextState}));
+        }
       }
 
       componentWillUnmount() {
@@ -88,7 +85,7 @@ export function getComponent(option, getProps) {
 
 /* eslint-disable react/prop-types */
 function EmptyComponent(props) {
-  return (<span>{props.children}</span>);
+  return (<span id={props.id}>{props.children}</span>);
 }
 getComponent.emptyComponent = EmptyComponent;
 

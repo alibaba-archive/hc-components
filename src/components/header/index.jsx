@@ -43,7 +43,7 @@ export class Header extends React.PureComponent {
     theme: PropTypes.string,
     onChange: PropTypes.func,
     hasSetting: PropTypes.bool,
-    noSearch: PropTypes.bool
+    search: PropTypes.any
   }
 
   static defaultProps = {
@@ -75,7 +75,7 @@ export class Header extends React.PureComponent {
   }
 
   render() {
-    const {loading, className, hasSetting, noSearch, style, collapsed, nick, noSider, avatar, theme, route, routes, subMenus, menu, brand, Link, orderKeys, getResolvePath} = this.props;
+    const {loading, className, hasSetting, search, style, collapsed, nick, noSider, avatar, theme, route, routes, subMenus, menu, brand, Link, orderKeys, getResolvePath} = this.props;
     const IMenu = this.props.Menu;
     return (
       <Layout.Header className={'j-com-header ' + className + (theme ? ' j-com-header-' + theme : '')} style={style} >
@@ -85,7 +85,7 @@ export class Header extends React.PureComponent {
           type={collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={this.toggleClick} />)}
         <div className='j-header-right' style={{display: nick === false ? 'none' : ''}}>
-          {noSearch ? null : (<HeaderSearch
+          {search !== undefined ? search : (<HeaderSearch
             className='j-header-action j-header-search'
             placeholder={this.getLocale('searchPlaceholder')}
             dataSource={[]}
