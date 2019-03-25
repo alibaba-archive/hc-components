@@ -18,7 +18,7 @@ export function getComponent(option, getProps) {
   const decorator = BaseComponent => {
     AppointComponent = AppointComponent || BaseComponent || EmptyComponent;
     class Component extends React.PureComponent {
-      constructor(props, context) {
+      constructor(props) {
         super(props);
         if (BaseComponent && !BaseComponent.prototype.isReactComponent) {
           this.state = {
@@ -47,7 +47,7 @@ export function getComponent(option, getProps) {
                 });
               }
             }
-          }, (nextState) => this.setState({stateProps: nextState}));
+          }, (nextState) => this.setState({stateProps: Object.assign(this.state.stateProps, nextState)}));
         }
       }
 
@@ -68,7 +68,7 @@ export function getComponent(option, getProps) {
         }
         const asyncProps = getProps ? getProps(newProps, this.context, (nextProps) => {
           this.setState({
-            stateProps: nextProps
+            stateProps: Object.assign(this.state.stateProps, nextProps)
           });
         }) : {};
         return (<Component ref={inst => this._wrappedComponent = inst} {...newProps} {...asyncProps} {...stateProps} />);

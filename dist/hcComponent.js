@@ -184,7 +184,7 @@ function getComponent(option, getProps) {
     var Component = function (_React$PureComponent) {
       _inherits(Component, _React$PureComponent);
 
-      function Component(props, context) {
+      function Component(props) {
         _classCallCheck(this, Component);
 
         var _this = _possibleConstructorReturn(this, (Component.__proto__ || Object.getPrototypeOf(Component)).call(this, props));
@@ -223,7 +223,7 @@ function getComponent(option, getProps) {
                 }
               }
             }, function (nextState) {
-              return _this2.setState({ stateProps: nextState });
+              return _this2.setState({ stateProps: Object.assign(_this2.state.stateProps, nextState) });
             });
           }
         }
@@ -254,7 +254,7 @@ function getComponent(option, getProps) {
           }
           var asyncProps = getProps ? getProps(newProps, this.context, function (nextProps) {
             _this3.setState({
-              stateProps: nextProps
+              stateProps: Object.assign(_this3.state.stateProps, nextProps)
             });
           }) : {};
           return _react2.default.createElement(Component, _extends({ ref: function ref(inst) {
