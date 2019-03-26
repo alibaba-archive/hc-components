@@ -104,13 +104,13 @@ class IArchive extends React.PureComponent {
         };
       }
       decorator.defaultValue = this.getFieldValue(name, option, editable);
-      const stateProps = option.getProps ? option.getProps.call(this, this.props, this.state.dataSource, (nextState) => {
+      const stateProps = option.getProps && option.getProps.call(this, this.props, this.state.dataSource, (nextState) => {
         this.setState({
           dataSource: Object.assign({}, this.state.dataSource, nextState)
         });
-      }, this.props.form) : {};
+      }, this.props.form);
       if (stateProps === false) return null;
-      const fieldInput = CustomForm.getFieldInput(option, option.props, stateProps, decorator);
+      const fieldInput = CustomForm.getFieldInput(option, option.props, stateProps || {}, decorator);
       return form.getFieldDecorator(name, decorator)(fieldInput);
     } else {
       return this.getFieldValue(name, option);

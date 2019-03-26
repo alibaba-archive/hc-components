@@ -7154,13 +7154,13 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
           };
         }
         decorator.defaultValue = this.getFieldValue(name, option, editable);
-        var stateProps = option.getProps ? option.getProps.call(this, this.props, this.state.dataSource, function (nextState) {
+        var stateProps = option.getProps && option.getProps.call(this, this.props, this.state.dataSource, function (nextState) {
           _this2.setState({
             dataSource: Object.assign({}, _this2.state.dataSource, nextState)
           });
-        }, this.props.form) : {};
+        }, this.props.form);
         if (stateProps === false) return null;
-        var fieldInput = _customForm.CustomForm.getFieldInput(option, option.props, stateProps, decorator);
+        var fieldInput = _customForm.CustomForm.getFieldInput(option, option.props, stateProps || {}, decorator);
         return form.getFieldDecorator(name, decorator)(fieldInput);
       } else {
         return this.getFieldValue(name, option);
