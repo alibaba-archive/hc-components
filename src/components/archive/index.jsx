@@ -109,6 +109,7 @@ class IArchive extends React.PureComponent {
           dataSource: Object.assign({}, this.state.dataSource, nextState)
         });
       }, this.props.form) : {};
+      if (stateProps === false) return null;
       const fieldInput = CustomForm.getFieldInput(option, option.props, stateProps, decorator);
       return form.getFieldDecorator(name, decorator)(fieldInput);
     } else {
@@ -126,18 +127,22 @@ class IArchive extends React.PureComponent {
     let item;
     let name;
     let label;
+    let input;
     for (let i = 0; i < count; i++) {
       item = options[i];
       if (item && (item.dataIndex || item.name)) {
         name = item.dataIndex || item.name;
         label = noLabel ? null :  (item.title || item.name);
-        fields.push(
-          <Col span={item.col ? item.col * span : item.span || span} key={name} style={{display: i < count ? 'block' : 'none'}}>
-            <Form.Item {...formItemLayout} {...item.attrs} label={label} style={itemStyle}>
-              {this.getFieldInput(name, item)}
-            </Form.Item>
-          </Col>
-        );
+        input = this.getFieldInput(name, item);
+        if (input) {
+          fields.push(
+            <Col span={item.col ? item.col * span : item.span || span} key={name} style={{display: i < count ? 'block' : 'none'}}>
+              <Form.Item {...formItemLayout} {...item.attrs} label={label} style={itemStyle}>
+                {input}
+              </Form.Item>
+            </Col>
+          );
+        }
       }
     }
     return fields;

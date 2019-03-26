@@ -7159,6 +7159,7 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
             dataSource: Object.assign({}, _this2.state.dataSource, nextState)
           });
         }, this.props.form) : {};
+        if (stateProps === false) return null;
         var fieldInput = _customForm.CustomForm.getFieldInput(option, option.props, stateProps, decorator);
         return form.getFieldDecorator(name, decorator)(fieldInput);
       } else {
@@ -7184,20 +7185,24 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
       var item = void 0;
       var name = void 0;
       var label = void 0;
+      var input = void 0;
       for (var i = 0; i < count; i++) {
         item = options[i];
         if (item && (item.dataIndex || item.name)) {
           name = item.dataIndex || item.name;
           label = noLabel ? null : item.title || item.name;
-          fields.push(_react2.default.createElement(
-            _col2.default,
-            { span: item.col ? item.col * span : item.span || span, key: name, style: { display: i < count ? 'block' : 'none' } },
-            _react2.default.createElement(
-              _form2.default.Item,
-              _extends({}, formItemLayout, item.attrs, { label: label, style: itemStyle }),
-              this.getFieldInput(name, item)
-            )
-          ));
+          input = this.getFieldInput(name, item);
+          if (input) {
+            fields.push(_react2.default.createElement(
+              _col2.default,
+              { span: item.col ? item.col * span : item.span || span, key: name, style: { display: i < count ? 'block' : 'none' } },
+              _react2.default.createElement(
+                _form2.default.Item,
+                _extends({}, formItemLayout, item.attrs, { label: label, style: itemStyle }),
+                input
+              )
+            ));
+          }
         }
       }
       return fields;
