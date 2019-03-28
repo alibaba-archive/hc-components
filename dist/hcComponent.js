@@ -8825,6 +8825,7 @@ var Search = exports.Search = (_temp = _class = function (_React$PureComponent) 
     var _this = _possibleConstructorReturn(this, (Search.__proto__ || Object.getPrototypeOf(Search)).call(this, props));
 
     _this.handleSearch = function (value, params) {
+      params = params || _this.props.params;
       var select = Object.assign({}, _this.state.select, { value: value });
       if (!_this.props.noSearch && _this.props.getResolver) {
         _this.getOptions(_this.props.getResolver(value, params));
@@ -8920,15 +8921,15 @@ var Search = exports.Search = (_temp = _class = function (_React$PureComponent) 
           filterOption: function filterOption(inputValue, option) {
             return inputValue === option.key || option.props.children.indexOf(inputValue) > -1;
           },
-          onSearch: function onSearch() {
+          onSearch: function onSearch(v) {
             var delay = _this3.props.delay;
             if (delay) {
               clearTimeout(_this3.timer);
               _this3.timer = setTimeout(function () {
-                _this3.handleSearch();
+                _this3.handleSearch(v);
               }, delay);
             } else {
-              _this3.handleSearch();
+              _this3.handleSearch(v);
             }
           },
           onSelect: function onSelect(v, o) {

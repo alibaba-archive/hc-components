@@ -78,6 +78,7 @@ export class Search extends React.PureComponent {
    * @param {} params
    */
   handleSearch = (value, params) => {
+    params = params || this.props.params;
     const select = Object.assign({}, this.state.select, {value: value});
     if (!this.props.noSearch && this.props.getResolver) {
       this.getOptions(this.props.getResolver(value, params));
@@ -100,15 +101,15 @@ export class Search extends React.PureComponent {
       filterOption={(inputValue, option) => {
         return inputValue === option.key || option.props.children.indexOf(inputValue) > -1;
       }}
-      onSearch={() => {
+      onSearch={(v) => {
         const delay = this.props.delay;
         if (delay) {
           clearTimeout(this.timer);
           this.timer = setTimeout(() => {
-            this.handleSearch();
+            this.handleSearch(v);
           }, delay);
         } else {
-          this.handleSearch();
+          this.handleSearch(v);
         }
       }}
       onSelect={(v, o) => {
