@@ -7103,9 +7103,14 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
   }, {
     key: 'getFieldValue',
     value: function getFieldValue(name, option, editable) {
-      var value = this.state.dataSource[name] || option.value;
+      var value = void 0;
+      if (this.state.dataSource[name] === undefined) {
+        value = option.value;
+      } else {
+        value = this.state.dataSource[name];
+      }
       if (this.props.formatter) {
-        return this.props.formatter(value);
+        return this.props.formatter(value, option);
       } else {
         if (editable) {
           return option.renderInput ? option.renderInput(value, this.state.dataSource) : value;
@@ -10437,6 +10442,9 @@ var Cascader = exports.Cascader = function () {
       var rely = _ref.rely,
           _ref$event = _ref.event,
           event = _ref$event === undefined ? 'onChange' : _ref$event,
+          state = _ref.state,
+          _ref$argIndex = _ref.argIndex,
+          argIndex = _ref$argIndex === undefined ? 2 : _ref$argIndex,
           getValueFromEvent = _ref.getValueFromEvent,
           trigger = _ref.trigger,
           _ref$props = _ref.props,
@@ -10478,8 +10486,9 @@ var Cascader = exports.Cascader = function () {
         * @param {object} context -父级挂载的组件
         * @param {func} setState -方法
         */
+        var _getProps = props.getProps;
         var getProps = function getProps(props, context, setState) {
-          var newProps = props.getProps ? props.getProps(props, context, setState) : {};
+          var newProps = _getProps ? _getProps(props, context, setState) : {};
           // 拿到ref实例
           newProps.ref = function (inst) {
             // 判断是否是Hoc组件
@@ -10489,6 +10498,8 @@ var Cascader = exports.Cascader = function () {
               refs[name] = inst;
             }
           };
+          Object.assign(newProps, state);
+
           var cascadeEvents = cascadesMap[name];
           if (cascadeEvents) {
             // 遍历级联事件
@@ -10507,11 +10518,13 @@ var Cascader = exports.Cascader = function () {
                     var instance = refs[instObj.name];
                     if (instance) {
                       //
-                      if (instance._triggerParams === undefined) {
+                      if (argIndex !== 1 && instance._triggerParams === undefined) {
                         // 我们给B组件传入值到第二个参数
                         var method = instance[instObj.trigger];
-                        instance[instObj.trigger] = function (v) {
-                          return method.call(this, v, instance._triggerParams);
+                        instance[instObj.trigger] = function () {
+                          var args = Array.prototype.slice.call(arguments, 0, argIndex - 1);
+                          args.push(instance._triggerParams);
+                          return method.apply(this, args);
                         };
                       }
                       // 约定把值传入给_triggerParams
