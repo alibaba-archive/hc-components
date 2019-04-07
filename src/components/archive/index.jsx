@@ -161,6 +161,12 @@ class IArchive extends React.PureComponent {
     e && e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.props.options.forEach(option => {
+          if (option.getValue) {
+            const name = option.dataIndex || option.name;
+            values[name] = option.getValue(values[name]);
+          }
+        });
         this.props.onSubmit && this.props.onSubmit(values);
       }
     });

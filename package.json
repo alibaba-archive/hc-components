@@ -1,6 +1,6 @@
 {
     "name": "hc-components",
-    "version": "1.0.22",
+    "version": "1.0.23",
     "main": "./dist/hcComponent.js",
     "author": "dtboost <dtboost@aliyun.com>",
     "description": "基于react的通用组件库",

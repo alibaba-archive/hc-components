@@ -62,16 +62,18 @@ export class DataSet extends React.PureComponent {
           this.state[name] = originValue;
         }
         if (prop.setter) {
-          this.stateUpdater[prop.setter] = (updateFn, callback) => (this.setState(({stateName}) => () => {
+          const setter = props.childProps[prop.setter];
+          this.stateUpdater[prop.setter] = (updateFn) => (this.setState((prevState) => {
             let newValue = typeof updateFn === 'function' ?
-              updateFn.call(this, stateName) :
+              updateFn.call(this, prevState[name]) :
               updateFn;
             const formatter = this.getFormatter(props.formatter, name);
             if (formatter) {
               newValue = formatter.call(this, prop.schema, newValue);
             }
-            return newValue;
-          }, callback));
+            setter && setter(newValue);
+            return {[name]: newValue};
+          }));
         }
       });
   }

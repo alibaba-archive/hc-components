@@ -49,7 +49,7 @@ export class Cascader {
    * }
    * ```
    */
-  getFieldDecorator = (name, {rely, event = 'onChange', state, argIndex = 2, getValueFromEvent, trigger, props = {}}) => Field => {
+  getFieldDecorator = (name, {rely, event = 'onChange', argIndex = 2, getValueFromEvent, trigger, props = {}}) => Field => {
     /**
      * + 初始化步骤
      * 1. rely有值表示当前组件和来源组件有级联关系，rely指向来源组件的实例名
@@ -96,7 +96,6 @@ export class Cascader {
           refs[name] = inst;
         }
       };
-      Object.assign(newProps, state);
 
       const cascadeEvents = cascadesMap[name];
       if (cascadeEvents) {
@@ -118,11 +117,15 @@ export class Cascader {
                   //
                   if (argIndex !== 1 && instance._triggerParams === undefined) {
                     // 我们给B组件传入值到第二个参数
+                    if (!instance._args) {
+                      instance._args = [];
+                      for (let i = 1; i < argIndex; i++) {
+                        instance._args.push(undefined);
+                      }
+                    }
                     const method = instance[instObj.trigger];
                     instance[instObj.trigger] = function () {
-                      const args = Array.prototype.slice.call(arguments, 0, argIndex - 1);
-                      args.push(instance._triggerParams);
-                      return method.apply(this, args);
+                      return method.apply(this, instance._args.concat(instance._triggerParams));
                     };
                   }
                   // 约定把值传入给_triggerParams

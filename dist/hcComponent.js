@@ -3653,6 +3653,8 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -3709,18 +3711,17 @@ var DataSet = exports.DataSet = (_temp = _class = function (_React$PureComponent
         _this.state[name] = originValue;
       }
       if (prop.setter) {
-        _this.stateUpdater[prop.setter] = function (updateFn, callback) {
-          return _this.setState(function (_ref) {
-            var stateName = _ref.stateName;
-            return function () {
-              var newValue = typeof updateFn === 'function' ? updateFn.call(_this, stateName) : updateFn;
-              var formatter = _this.getFormatter(props.formatter, name);
-              if (formatter) {
-                newValue = formatter.call(_this, prop.schema, newValue);
-              }
-              return newValue;
-            };
-          }, callback);
+        var setter = props.childProps[prop.setter];
+        _this.stateUpdater[prop.setter] = function (updateFn) {
+          return _this.setState(function (prevState) {
+            var newValue = typeof updateFn === 'function' ? updateFn.call(_this, prevState[name]) : updateFn;
+            var formatter = _this.getFormatter(props.formatter, name);
+            if (formatter) {
+              newValue = formatter.call(_this, prop.schema, newValue);
+            }
+            setter && setter(newValue);
+            return _defineProperty({}, name, newValue);
+          });
         };
       }
     });
@@ -7081,6 +7082,12 @@ var IArchive = (_temp = _class = function (_React$PureComponent) {
       e && e.preventDefault();
       _this.props.form.validateFields(function (err, values) {
         if (!err) {
+          _this.props.options.forEach(function (option) {
+            if (option.getValue) {
+              var name = option.dataIndex || option.name;
+              values[name] = option.getValue(values[name]);
+            }
+          });
           _this.props.onSubmit && _this.props.onSubmit(values);
         }
       });
@@ -10442,7 +10449,6 @@ var Cascader = exports.Cascader = function () {
       var rely = _ref.rely,
           _ref$event = _ref.event,
           event = _ref$event === undefined ? 'onChange' : _ref$event,
-          state = _ref.state,
           _ref$argIndex = _ref.argIndex,
           argIndex = _ref$argIndex === undefined ? 2 : _ref$argIndex,
           getValueFromEvent = _ref.getValueFromEvent,
@@ -10498,7 +10504,6 @@ var Cascader = exports.Cascader = function () {
               refs[name] = inst;
             }
           };
-          Object.assign(newProps, state);
 
           var cascadeEvents = cascadesMap[name];
           if (cascadeEvents) {
@@ -10520,11 +10525,15 @@ var Cascader = exports.Cascader = function () {
                       //
                       if (argIndex !== 1 && instance._triggerParams === undefined) {
                         // 我们给B组件传入值到第二个参数
+                        if (!instance._args) {
+                          instance._args = [];
+                          for (var i = 1; i < argIndex; i++) {
+                            instance._args.push(undefined);
+                          }
+                        }
                         var method = instance[instObj.trigger];
                         instance[instObj.trigger] = function () {
-                          var args = Array.prototype.slice.call(arguments, 0, argIndex - 1);
-                          args.push(instance._triggerParams);
-                          return method.apply(this, args);
+                          return method.apply(this, instance._args.concat(instance._triggerParams));
                         };
                       }
                       // 约定把值传入给_triggerParams
