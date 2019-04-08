@@ -3702,13 +3702,15 @@ var DataSet = exports.DataSet = (_temp = _class = function (_React$PureComponent
      */
     Object.keys(props.data).forEach(function (name) {
       var prop = props.data[name];
-      var originValue = typeof prop.value === 'function' ? prop.value.call(_this, _this.props) : prop.value;
-      var formatter = _this.getFormatter(props.formatter, name);
-      // formatter是一系列解决组件schema的格式化函数
-      if (formatter) {
-        _this.state[name] = formatter.call(_this, prop.schema, originValue);
-      } else {
-        _this.state[name] = originValue;
+      if (prop.value) {
+        var originValue = typeof prop.value === 'function' ? prop.value.call(_this, _this.props) : prop.value;
+        var formatter = _this.getFormatter(props.formatter, name);
+        // formatter是一系列解决组件schema的格式化函数
+        if (formatter) {
+          _this.state[name] = formatter.call(_this, prop.schema, originValue);
+        } else {
+          _this.state[name] = originValue;
+        }
       }
       if (prop.setter) {
         var setter = props.childProps[prop.setter];

@@ -53,13 +53,15 @@ export class DataSet extends React.PureComponent {
       .keys(props.data)
       .forEach(name => {
         const prop = props.data[name];
-        const originValue = typeof prop.value === 'function' ? prop.value.call(this, this.props) : prop.value;
-        const formatter = this.getFormatter(props.formatter, name);
-        // formatter是一系列解决组件schema的格式化函数
-        if (formatter) {
-          this.state[name] = formatter.call(this, prop.schema, originValue);
-        } else {
-          this.state[name] = originValue;
+        if (prop.value) {
+          const originValue = typeof prop.value === 'function' ? prop.value.call(this, this.props) : prop.value;
+          const formatter = this.getFormatter(props.formatter, name);
+          // formatter是一系列解决组件schema的格式化函数
+          if (formatter) {
+            this.state[name] = formatter.call(this, prop.schema, originValue);
+          } else {
+            this.state[name] = originValue;
+          }
         }
         if (prop.setter) {
           const setter = props.childProps[prop.setter];
