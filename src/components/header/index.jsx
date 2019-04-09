@@ -14,7 +14,7 @@ import './index.less';
 
 import {localeContext} from '../../core/localeContext';
 
-@localeContext('DataSet', {
+@localeContext('Header', {
   searchPlaceholder: '站内搜索',
   profile: '个人中心',
   setting: '设置',

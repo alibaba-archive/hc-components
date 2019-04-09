@@ -6,7 +6,7 @@ import 'react-joyride/lib/react-joyride-compiled.css';
 
 const types = ['continuous', 'single'];
 
-@localeContext('CustomForm', {
+@localeContext('Tour', {
   back: '后退',
   close: '关闭',
   last: '完成',
